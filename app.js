@@ -92,14 +92,6 @@ class Shape {
 
 
 
-
-
-
-
-
-
-
-
 // Game object
 const game = {
   currentShape: null,
@@ -157,6 +149,7 @@ const game = {
     }
   },
   clearBoard : function(){
+    //removes the board from the dom
     document.querySelector('.board').remove()
   },
   getNewShape: function() {
@@ -164,7 +157,7 @@ const game = {
     const offset = [0, Math.floor(this.WIDTH / 2)]; //set its initial coordinates to be top of the board, in the middle
     return new Shape(shape, offset);
   },
-  // return true if a collision will occur. Need to check: left right walls
+  // return true if a collision will occur to check: left right walls
   isHitWall : function(direction){
     // if direction is left, look at every point in the shape and see if shape point[0] + offsetC !== 0
     let collision = false;
@@ -192,7 +185,21 @@ const game = {
   },
   // returns true if the piece moving into 'direction' would cause a collision
   hitOccupiedPlace : function(direction){
-    return false // TODO
+    isHitPlace = false;
+    const offsetR = this.currentShape.offset[0];
+    const offsetC = this.currentShape.offset[1];
+    if(direction === "down"){
+      this.currentShape.shape.forEach((piece)=>{
+        // get the current position of the piece
+        let row = piece[0]+offsetR;
+        let col = piece[1]+offsetC;
+        // check the row below it, at the same column coordinate as the piece
+        if(this.BOARD[row+1][col].occupied){
+          isHitPlace = true;
+        }
+      })
+    }
+    return isHitPlace
   },
   addShapeToBoard : function(){
     const pieceToPlace = this.currentShape;
