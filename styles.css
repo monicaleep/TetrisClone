@@ -10,7 +10,7 @@
   border: solid black 1px;
   background-color: lightblue;
 }
-.piece{
+.occupied{
   background-color: grey;
 }
 .active{
