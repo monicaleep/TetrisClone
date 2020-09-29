@@ -22,7 +22,7 @@ const SHAPES = [
     [0, 0],
     [1, 0],
     [1, 1],
-    [1, 2],
+    [2, 1],
   ], // Z
   [
     [0, 1],
@@ -95,8 +95,6 @@ class Shape {
 
 
 
-// todo print the board state to console in a nice way
-const printBoard = () => {};
 
 
 
@@ -125,6 +123,13 @@ const game = {
     this.renderBoard();
     this.currentShape.drawShape();
   },
+  // print the board state to console in a nice way
+  printBoard : function(){
+    this.BOARD.forEach(row=>{
+      console.table(row)
+    })
+  },
+
   //return a random entry from the array of shapes
   getRandomShape : function(){
     return SHAPES[Math.floor(Math.random() * SHAPES.length)];
@@ -175,13 +180,33 @@ const game = {
     return collision;
   },
   isHitBottom : function(){
-    return false
+    let collision = false;
+    let offsetR = this.currentShape.offset[0];
+    // collision is true if any single square from the shape is hitting bottom
+    collision = this.currentShape.shape.some((piece)=>{
+      return offsetR + piece[0] === this.HEIGHT - 1;
+    });
+    return collision;
   },
   hitOccupiedPlace : function(direction){
     return false
   },
   addShapeToBoard : function(){
-    // checkFullRows()
+    const pieceToPlace = this.currentShape;
+    const offsetR = this.currentShape.offset[0];
+    const offsetC = this.currentShape.offset[1];
+    pieceToPlace.shape.forEach((piece)=>{
+      // get the piece's row and coloumn, add to the shape's offset
+      // change the board array;
+    });
+    // clear shape
+    // render the newly updated board
+    // checkFullRows() - eventually set a timeout
+  },
+  checkFullRow : function(){
+    // check if all rows are occupied
+    // splice out the row(s)
+    // push a new empty row to the board array
   },
   handleKeypress: function(e){
     if (e.keyCode === 39) {

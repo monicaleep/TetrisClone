@@ -1,5 +1,6 @@
 .board{
   border: solid black 1px;
+  width: 400px;
 }
 .row{
   display: flex
