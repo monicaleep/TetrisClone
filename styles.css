@@ -1,0 +1,18 @@
+.board{
+  border: solid black 1px;
+}
+.row{
+  display: flex
+}
+.square{
+  height: 40px;
+  width: 40px;
+  border: solid black 1px;
+  background-color: lightblue;
+}
+.piece{
+  background-color: grey;
+}
+.active{
+  background-color: red;
+}
