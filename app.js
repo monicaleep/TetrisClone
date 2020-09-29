@@ -73,7 +73,7 @@ class Shape {
       let r = this.shape[i][0] + this.offset[0];
       let c = this.shape[i][1] + this.offset[1];
       let target = document.querySelector(`#row${r}col${c}`);
-      target.style.backgroundColor = "red";
+      target.classList.add('active')
     }
   }
   // clear the shape from the DOM
@@ -84,7 +84,7 @@ class Shape {
       let r = this.shape[i][0] + this.offset[0];
       let c = this.shape[i][1] + this.offset[1];
       let target = document.querySelector(`#row${r}col${c}`);
-      target.style.backgroundColor = "grey";
+      target.classList.remove('active')
     }
   }
 }
@@ -114,7 +114,6 @@ const game = {
       this.BOARD.push([]);
       for (let j = 0; j < this.WIDTH; j++) {
         this.BOARD[i].push({
-          color: "grey",
           occupied: false,
         });
       }
@@ -123,7 +122,7 @@ const game = {
     this.renderBoard();
     this.currentShape.drawShape();
   },
-  // print the board state to console in a nice way
+  // print the board state to console in a nice way, a helper
   printBoard : function(){
     this.BOARD.forEach(row=>{
       console.table(row)
@@ -147,7 +146,6 @@ const game = {
       for (let j = 0; j < this.BOARD[i].length; j++) {
         const square = document.createElement("div");
         square.classList.add("square");
-        square.style.backgroundColor = this.BOARD[i][j].color;
         square.innerText = "" + i + "," + j;
         square.setAttribute("id", `row${i}col${j}`);
         if (this.BOARD[i][j].occupied) {
@@ -157,6 +155,9 @@ const game = {
       }
       boardDOM.appendChild(row);
     }
+  },
+  clearBoard : function(){
+    document.querySelector('.board').remove()
   },
   getNewShape: function() {
     const shape = this.getRandomShape(); // get random shape from the array of shapes
@@ -179,6 +180,7 @@ const game = {
     }
     return collision;
   },
+  // returns true if the piece hits the bottom of the board
   isHitBottom : function(){
     let collision = false;
     let offsetR = this.currentShape.offset[0];
@@ -188,8 +190,9 @@ const game = {
     });
     return collision;
   },
+  // returns true if the piece moving into 'direction' would cause a collision
   hitOccupiedPlace : function(direction){
-    return false
+    return false // TODO
   },
   addShapeToBoard : function(){
     const pieceToPlace = this.currentShape;
@@ -197,10 +200,17 @@ const game = {
     const offsetC = this.currentShape.offset[1];
     pieceToPlace.shape.forEach((piece)=>{
       // get the piece's row and coloumn, add to the shape's offset
+      let pieceR = piece[0] + offsetR;
+      let pieceC = piece[1] + offsetC;
+      this.BOARD[pieceR][pieceC].occupied = true;
       // change the board array;
     });
     // clear shape
+    this.currentShape.clearShape();
+    // need to remove the existing board from the DOM
+    this.clearBoard()
     // render the newly updated board
+    this.renderBoard();
     // checkFullRows() - eventually set a timeout
   },
   checkFullRow : function(){
@@ -220,6 +230,8 @@ const game = {
     } else if (e.keyCode === 40) {
       if (this.isHitBottom() || this.hitOccupiedPlace("down")){
         this.addShapeToBoard();
+        this.currentShape = this.getNewShape();
+        this.currentShape.drawShape();
       } else{
         this.currentShape.moveDown();
       }
