@@ -18,3 +18,7 @@ TODO
 - [ ] game over when piece cannot move or cannot even be generated to the board.
 - [ ] update score on DOM
 - [ ] handle piece rotation
+- [ ] check if piece can even rotate
+- [ ] DRY up the code
+- [ ] add zen mode - only squares given
+- [ ] increase speed of gravity over time

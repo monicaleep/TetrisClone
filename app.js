@@ -230,20 +230,21 @@ const game = {
     // check if all columns in each row are occupied
     this.BOARD.forEach((row, rowindex)=>{
       if(row.every((square) =>  square.occupied)){
-        console.log('true', rowindex)
         // if so splice out the row(s) from board array
-        console.log(this.BOARD)
         this.BOARD.splice(rowindex,1)
-        console.log(this.BOARD)
         // update the score
         this.score += 10;
         // add a new empty row to the start of board array
-        this.BOARD.unshift(new Array(this.WIDTH).fill({occupied: false}))
-
+        this.BOARD.unshift(new Array(this.WIDTH).fill({occupied: false}));
+        // update dom
+        this.updateScore()
+        this.clearBoard();
+        this.renderBoard();
       }
     });
-    this.clearBoard();
-    this.renderBoard();
+  },
+  updateScore: function(){
+    document.getElementById('score').innerText = this.score
   },
   handleKeypress: function(e){
     if (e.keyCode === 39) {
