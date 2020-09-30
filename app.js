@@ -1,47 +1,47 @@
 // Array holding all possible shapes in row/col coordinates
 const SHAPES = [
-  [
-    [0, 0],
-    [0, 1],
-    [0, 2],
-    [0, 3],
-  ], // I
+  // [
+  //   [0, 0],
+  //   [0, 1],
+  //   [0, 2],
+  //   [0, 3],
+  // ], // I
   [
     [0, 0],
     [0, 1],
     [1, 1],
     [1, 0],
   ], // O
-  [
-    [1, 0],
-    [2, 0],
-    [0, 1],
-    [1, 1],
-  ], //S
-  [
-    [0, 0],
-    [1, 0],
-    [1, 1],
-    [2, 1],
-  ], // Z
-  [
-    [0, 1],
-    [1, 1],
-    [2, 1],
-    [2, 0],
-  ], // L
-  [
-    [0, 0],
-    [0, 1],
-    [1, 1],
-    [2, 1],
-  ], // J
-  [
-    [1, 0],
-    [0, 1],
-    [1, 1],
-    [2, 1],
-  ], // T
+  // [
+  //   [1, 0],
+  //   [2, 0],
+  //   [0, 1],
+  //   [1, 1],
+  // ], //S
+  // [
+  //   [0, 0],
+  //   [1, 0],
+  //   [1, 1],
+  //   [2, 1],
+  // ], // Z
+  // [
+  //   [0, 1],
+  //   [1, 1],
+  //   [2, 1],
+  //   [2, 0],
+  // ], // L
+  // [
+  //   [0, 0],
+  //   [0, 1],
+  //   [1, 1],
+  //   [2, 1],
+  // ], // J
+  // [
+  //   [1, 0],
+  //   [0, 1],
+  //   [1, 1],
+  //   [2, 1],
+  // ], // T
 ];
 
 
@@ -98,7 +98,7 @@ const game = {
   HEIGHT: 10,
   WIDTH: 10,
   BOARD: [],
-  SCORE: 0,
+  score: 0,
   // called when the DOM is loaded. Creates initial board array, gets first shape, and renders everything
   start: function() {
     //function to make the initial board array
@@ -125,6 +125,7 @@ const game = {
   getRandomShape : function(){
     return SHAPES[Math.floor(Math.random() * SHAPES.length)];
   },
+
   // a function which renders the board array to the DOM
   renderBoard: function() {
     const boardDOM = document.createElement("div");
@@ -148,10 +149,13 @@ const game = {
       boardDOM.appendChild(row);
     }
   },
+
   clearBoard : function(){
     //removes the board from the dom
     document.querySelector('.board').remove()
   },
+
+  // returns a new random shape placed at the top of the board
   getNewShape: function() {
     const shape = this.getRandomShape(); // get random shape from the array of shapes
     const offset = [0, Math.floor(this.WIDTH / 2)]; //set its initial coordinates to be top of the board, in the middle
@@ -201,6 +205,7 @@ const game = {
     }
     return isHitPlace
   },
+  // adds the current shape to the board, setting the places where shape was to occupied
   addShapeToBoard : function(){
     const pieceToPlace = this.currentShape;
     const offsetR = this.currentShape.offset[0];
@@ -214,16 +219,31 @@ const game = {
     });
     // clear shape
     this.currentShape.clearShape();
-    // need to remove the existing board from the DOM
+    //  remove the existing board from the DOM
     this.clearBoard()
     // render the newly updated board
     this.renderBoard();
-    // checkFullRows() - eventually set a timeout
+    // check if any rows are full
+    this.handleFullRows();// - eventually set a timeout
   },
-  checkFullRow : function(){
-    // check if all rows are occupied
-    // splice out the row(s)
-    // push a new empty row to the board array
+  handleFullRows : function(){
+    // check if all columns in each row are occupied
+    this.BOARD.forEach((row, rowindex)=>{
+      if(row.every((square) =>  square.occupied)){
+        console.log('true', rowindex)
+        // if so splice out the row(s) from board array
+        console.log(this.BOARD)
+        this.BOARD.splice(rowindex,1)
+        console.log(this.BOARD)
+        // update the score
+        this.score += 10;
+        // add a new empty row to the start of board array
+        this.BOARD.unshift(new Array(this.WIDTH).fill({occupied: false}))
+
+      }
+    });
+    this.clearBoard();
+    this.renderBoard();
   },
   handleKeypress: function(e){
     if (e.keyCode === 39) {
@@ -237,6 +257,7 @@ const game = {
     } else if (e.keyCode === 40) {
       if (this.isHitBottom() || this.hitOccupiedPlace("down")){
         this.addShapeToBoard();
+        // todo, check new shape can be placed (i.e. board is not full!)
         this.currentShape = this.getNewShape();
         this.currentShape.drawShape();
       } else{
