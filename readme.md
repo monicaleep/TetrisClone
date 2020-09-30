@@ -11,21 +11,21 @@ TODO
 - [x] check l/r for pieces already placed,
 - [x] update piece offset (rerender)
 - [x] event listeners - down, check for piece or bottom, set piece to become part of board
-- [ ] gravity - same as event listener for down but happens every 5 sec.
+- [x] gravity - same as event listener for down but happens every 5 sec.
 - [x] check board for full rows every time piece is "placed" into the board
 - [x] clear a full row, maybe use splice and then place a new empty row at the beginning of the board? rerender board. Need to check for multiple rows cleared at once.
 - [x] board generates a random piece each time a piece is placed
 - [x] refactor to use the checkCollision function
 - [x] game over when piece cannot move or cannot even be generated to the board.
-- [ ] add game over stuff, message and animation
-- [ ] update score on DOM
+- [x] add game over stuff, message and animation
+- [x] update score on DOM
 - [ ] handle piece rotation
 - [ ] check if piece can even rotate
 - [ ] DRY up the code
 - [ ] add zen mode - only squares given
 - [ ] increase speed of gravity over time
 - [ ] add reset button
-- [ ] add 1 point to score for every time piece moves down
+- [x] add 1 point to score for every time piece moves down
 - [ ] display next piece on LHS
 - [ ] more points for multiple rows cleared
 - [ ] timer at the bottom

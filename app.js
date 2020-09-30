@@ -95,11 +95,12 @@ class Shape {
 // Game object
 const game = {
   currentShape: null,
-  HEIGHT: 20,
+  HEIGHT: 10,
   WIDTH: 10,
   BOARD: [],
   gameIsOver: false,
   score: 0,
+  int: null,
 
   // called when the DOM is loaded. Creates initial board array, gets first shape, and renders everything
   start: function() {
@@ -115,6 +116,9 @@ const game = {
     this.currentShape = this.getNewShape();
     this.renderBoard();
     this.currentShape.drawShape();
+    this.int = setInterval(()=>{
+      this.gravity()
+    }, 500)
   },
 
   // print the board state to console in a nice way, a helper
@@ -251,6 +255,7 @@ const game = {
   // function runs when game over
   gameOver : function(){
     this.gameIsOver = true;
+    clearInterval(this.int)
     const message = document.createElement('h2');
     message.innerText = 'Game Over';
     document.querySelector('aside').appendChild(message)
@@ -279,6 +284,8 @@ const game = {
       // TODO increase score by 1
     } else{
       this.currentShape.moveDown();
+      this.score++;
+      this.updateScore();
     }
   },
 
