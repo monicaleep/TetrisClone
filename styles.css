@@ -17,3 +17,14 @@
 .active{
   background-color: red;
 }
+body{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding-top: 100px;
+  height: 100%;
+}
+aside{
+  width: 30%;
+  height: 100%;
+}

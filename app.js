@@ -98,7 +98,7 @@ const game = {
   HEIGHT: 10,
   WIDTH: 10,
   BOARD: [],
-  gameOver: false,
+  gameIsOver: false,
   score: 0,
   // called when the DOM is loaded. Creates initial board array, gets first shape, and renders everything
   start: function() {
@@ -192,41 +192,7 @@ const game = {
     return collision;
   },
 
-  // returns true if the piece moving into 'direction' would cause a collision
-  hitOccupiedPlace : function(direction){
-    isHitPlace = false;
-    const offsetR = this.currentShape.offset[0];
-    const offsetC = this.currentShape.offset[1];
-    if(direction === "down"){
-      this.currentShape.shape.forEach((piece)=>{
-        // get the current position of the piece
-        let row = piece[0]+offsetR;
-        let col = piece[1]+offsetC;
-        // check the row below it, at the same column coordinate as the piece
-        if(this.BOARD[row+1][col].occupied){
-          isHitPlace = true;
-        }
-      })
-    } else if (direction === "left"){
-      this.currentShape.shape.forEach((piece)=>{
-        let row = piece[0] + offsetR;
-        let col = piece[1] + offsetC;
-        if(this.BOARD[row][col-1].occupied){
-          isHitPlace = true;
-        }
-      })
-    } else if (direction === "right"){
-      this.currentShape.shape.forEach((piece)=>{
-        let row = piece[0] + offsetR;
-        let col = piece[1] + offsetC;
-        if(this.BOARD[row][col+1].occupied){
-          isHitPlace = true;
-        }
-      })
-    }
-    return isHitPlace
-  },
-
+  
   // adds the current shape to the board, setting the places where shape was to occupied
   addShapeToBoard : function(){
     const pieceToPlace = this.currentShape;
@@ -278,8 +244,15 @@ const game = {
         collision = true;
       }
     });
-    console.log(collision);
     return collision;
+  },
+
+  // function runs when game over
+  gameOver : function(){
+    this.gameIsOver = true;
+    const message = document.createElement('h2');
+    message.innerText = 'Game Over';
+    document.querySelector('aside').appendChild(message)
   },
 
   // update the scoreboard on the dom
@@ -289,29 +262,35 @@ const game = {
 
   // handle user inputs L/R/D/U TODO up
   handleKeypress: function(e){
-    if (this.gameOver){
+    if (this.gameIsOver){
       return;
     }
+    // right arrow moves it right
     if (e.keyCode === 39) {
-      if (!this.isHitWall("right") && !this.hitOccupiedPlace("right")) {
+      if (!this.isHitWall("right") && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]+1)) {
         this.currentShape.moveRight();
       }
+      // left arrow moves it left
     } else if (e.keyCode === 37) {
-      if (!this.isHitWall("left") && !this.hitOccupiedPlace("left")) {
+      if (!this.isHitWall("left") && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]-1)) {
         this.currentShape.moveLeft();
       }
+      // down arrow moves it down -> put this all in a function called gravity
     } else if (e.keyCode === 40) {
-      if (this.isHitBottom() || this.hitOccupiedPlace("down")){
+      // if moving downward would hit something
+      if (this.isHitBottom() || this.checkCollision(this.currentShape.offset[0]+1,this.currentShape.offset[1])){
         this.addShapeToBoard();
-        // TODO, check new shape can be placed (i.e. board is not full!)
+        // get a new shape if required
         this.currentShape = this.getNewShape();
-        // checks if current offset is having a collision on the board
+        // checks if the new shape is having a collision on the board
         if(this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1])){
-          // todo
-          this.gameOver = true;
+          // the new shape cannot be placed onto the board
+          this.gameOver();
         } else{
           this.currentShape.drawShape();
         }
+        // otherwise just move it down
+        // TODO increase score by 1
       } else{
         this.currentShape.moveDown();
       }
