@@ -98,6 +98,7 @@ const game = {
   HEIGHT: 10,
   WIDTH: 10,
   BOARD: [],
+  gameOver: false,
   score: 0,
   // called when the DOM is loaded. Creates initial board array, gets first shape, and renders everything
   start: function() {
@@ -114,6 +115,7 @@ const game = {
     this.renderBoard();
     this.currentShape.drawShape();
   },
+
   // print the board state to console in a nice way, a helper
   printBoard : function(){
     this.BOARD.forEach(row=>{
@@ -150,8 +152,8 @@ const game = {
     }
   },
 
+  //removes the board from the dom
   clearBoard : function(){
-    //removes the board from the dom
     document.querySelector('.board').remove()
   },
 
@@ -161,6 +163,7 @@ const game = {
     const offset = [0, Math.floor(this.WIDTH / 2)]; //set its initial coordinates to be top of the board, in the middle
     return new Shape(shape, offset);
   },
+
   // return true if a collision will occur to check: left right walls
   isHitWall : function(direction){
     // if direction is left, look at every point in the shape and see if shape point[0] + offsetC !== 0
@@ -177,6 +180,7 @@ const game = {
     }
     return collision;
   },
+
   // returns true if the piece hits the bottom of the board
   isHitBottom : function(){
     let collision = false;
@@ -187,6 +191,7 @@ const game = {
     });
     return collision;
   },
+
   // returns true if the piece moving into 'direction' would cause a collision
   hitOccupiedPlace : function(direction){
     isHitPlace = false;
@@ -221,6 +226,7 @@ const game = {
     }
     return isHitPlace
   },
+
   // adds the current shape to the board, setting the places where shape was to occupied
   addShapeToBoard : function(){
     const pieceToPlace = this.currentShape;
@@ -242,6 +248,8 @@ const game = {
     // check if any rows are full
     this.handleFullRows();// - eventually set a timeout
   },
+
+  // scan the board for full rows and handle them
   handleFullRows : function(){
     // check if all columns in each row are occupied
     this.BOARD.forEach((row, rowindex)=>{
@@ -259,10 +267,31 @@ const game = {
       }
     });
   },
+
+  // takes a new offset row and column and checks if current piece will cause a collision if placed there
+  checkCollision : function(newRow,newColumn){
+    let collision = false;
+    this.currentShape.shape.forEach((piece)=>{
+      let rowToCheck = piece[0] + newRow;
+      let colToCheck = piece[1] + newColumn;
+      if(this.BOARD[rowToCheck][colToCheck].occupied){
+        collision = true;
+      }
+    });
+    console.log(collision);
+    return collision;
+  },
+
+  // update the scoreboard on the dom
   updateScore: function(){
     document.getElementById('score').innerText = this.score
   },
+
+  // handle user inputs L/R/D/U TODO up
   handleKeypress: function(e){
+    if (this.gameOver){
+      return;
+    }
     if (e.keyCode === 39) {
       if (!this.isHitWall("right") && !this.hitOccupiedPlace("right")) {
         this.currentShape.moveRight();
@@ -276,7 +305,13 @@ const game = {
         this.addShapeToBoard();
         // TODO, check new shape can be placed (i.e. board is not full!)
         this.currentShape = this.getNewShape();
-        this.currentShape.drawShape();
+        // checks if current offset is having a collision on the board
+        if(this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1])){
+          // todo
+          this.gameOver = true;
+        } else{
+          this.currentShape.drawShape();
+        }
       } else{
         this.currentShape.moveDown();
       }
