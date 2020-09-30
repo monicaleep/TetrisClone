@@ -1,54 +1,62 @@
 // Array holding all possible shapes in row/col coordinates
 const SHAPES = [
-  [
+  {shape: [
     [0, 0],
     [0, 1],
     [0, 2],
     [0, 3],
-  ], // I
-  [
+  ],
+  color: 'blue'}, // I
+  {shape:[
     [0, 0],
     [0, 1],
     [1, 1],
     [1, 0],
-  ], // O
-  [
+  ],
+  color: 'yellow'}, // O
+  {shape: [
+    [0, 0],
+    [1, 1],
+    [0, 1],
+    [1, 2],
+  ],
+  color: 'hotpink'}, //Z
+  {shape:[
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [2, 1],
+  ],
+  color: 'green'}, // S
+  {shape:[
+    [0, 0],
     [1, 0],
     [2, 0],
-    [0, 1],
-    [1, 1],
-  ], //S
-  [
-    [0, 0],
-    [1, 0],
-    [1, 1],
-    [2, 1],
-  ], // Z
-  [
-    [0, 1],
-    [1, 1],
-    [2, 1],
-    [2, 0],
-  ], // L
-  [
+    [2, -1],
+  ],
+  color: 'purple'}, // J
+  {shape: [
     [0, 0],
     [0, 1],
     [1, 1],
     [2, 1],
-  ], // J
-  [
-    [1, 0],
+  ],
+  color: 'orange'}, // L
+  {shape: [
+    [0, 0],
     [0, 1],
+    [0, 2],
     [1, 1],
-    [2, 1],
-  ], // T
+  ],
+  color: 'red'}, // T
 ];
 
 
 class Shape {
-  constructor(shape, offset) {
+  constructor(shape, offset, color) {
     this.shape = shape;
-    this.offset = offset
+    this.offset = offset;
+    this.color = color;
   }
   moveLeft(){
     this.clearShape();
@@ -73,7 +81,7 @@ class Shape {
       let r = this.shape[i][0] + this.offset[0];
       let c = this.shape[i][1] + this.offset[1];
       let target = document.querySelector(`#row${r}col${c}`);
-      target.classList.add('active')
+      target.style.backgroundColor = this.color;
     }
   }
   // clear the shape from the DOM
@@ -84,7 +92,7 @@ class Shape {
       let r = this.shape[i][0] + this.offset[0];
       let c = this.shape[i][1] + this.offset[1];
       let target = document.querySelector(`#row${r}col${c}`);
-      target.classList.remove('active')
+      target.style.backgroundColor = 'lightblue'
     }
   }
 }
@@ -95,12 +103,12 @@ class Shape {
 // Game object
 const game = {
   currentShape: null,
-  HEIGHT: 10,
+  HEIGHT: 20,
   WIDTH: 10,
   BOARD: [],
   gameIsOver: false,
   score: 0,
-  int: null,
+  int: null, // will hold the setInterval for gravity
 
   // called when the DOM is loaded. Creates initial board array, gets first shape, and renders everything
   start: function() {
@@ -166,7 +174,7 @@ const game = {
   getNewShape: function() {
     const shape = this.getRandomShape(); // get random shape from the array of shapes
     const offset = [0, Math.floor(this.WIDTH / 2)]; //set its initial coordinates to be top of the board, in the middle
-    return new Shape(shape, offset);
+    return new Shape(shape.shape, offset, shape.color);
   },
 
   // return true if a collision will occur to check: left right walls
@@ -275,6 +283,8 @@ const game = {
       this.currentShape = this.getNewShape();
       // checks if the new shape is having a collision on the board
       if(this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1])){
+        // draw the shape anyways
+        this.currentShape.drawShape();
         // the new shape cannot be placed onto the board
         this.gameOver();
       } else{

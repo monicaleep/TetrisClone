@@ -21,7 +21,6 @@ TODO
 - [x] update score on DOM
 - [ ] handle piece rotation
 - [ ] check if piece can even rotate
-- [ ] DRY up the code
 - [ ] add zen mode - only squares given
 - [ ] increase speed of gravity over time
 - [ ] add reset button
