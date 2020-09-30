@@ -95,11 +95,12 @@ class Shape {
 // Game object
 const game = {
   currentShape: null,
-  HEIGHT: 10,
+  HEIGHT: 20,
   WIDTH: 10,
   BOARD: [],
   gameIsOver: false,
   score: 0,
+
   // called when the DOM is loaded. Creates initial board array, gets first shape, and renders everything
   start: function() {
     //function to make the initial board array
@@ -192,7 +193,7 @@ const game = {
     return collision;
   },
 
-  
+
   // adds the current shape to the board, setting the places where shape was to occupied
   addShapeToBoard : function(){
     const pieceToPlace = this.currentShape;
@@ -260,6 +261,27 @@ const game = {
     document.getElementById('score').innerText = this.score
   },
 
+  // gravity
+  gravity: function(){
+    // if moving downward would hit something
+    if (this.isHitBottom() || this.checkCollision(this.currentShape.offset[0]+1,this.currentShape.offset[1])){
+      this.addShapeToBoard();
+      // get a new shape if required
+      this.currentShape = this.getNewShape();
+      // checks if the new shape is having a collision on the board
+      if(this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1])){
+        // the new shape cannot be placed onto the board
+        this.gameOver();
+      } else{
+        this.currentShape.drawShape();
+      }
+      // otherwise just move it down
+      // TODO increase score by 1
+    } else{
+      this.currentShape.moveDown();
+    }
+  },
+
   // handle user inputs L/R/D/U TODO up
   handleKeypress: function(e){
     if (this.gameIsOver){
@@ -277,23 +299,7 @@ const game = {
       }
       // down arrow moves it down -> put this all in a function called gravity
     } else if (e.keyCode === 40) {
-      // if moving downward would hit something
-      if (this.isHitBottom() || this.checkCollision(this.currentShape.offset[0]+1,this.currentShape.offset[1])){
-        this.addShapeToBoard();
-        // get a new shape if required
-        this.currentShape = this.getNewShape();
-        // checks if the new shape is having a collision on the board
-        if(this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1])){
-          // the new shape cannot be placed onto the board
-          this.gameOver();
-        } else{
-          this.currentShape.drawShape();
-        }
-        // otherwise just move it down
-        // TODO increase score by 1
-      } else{
-        this.currentShape.moveDown();
-      }
+        this.gravity()
     }
   }
 

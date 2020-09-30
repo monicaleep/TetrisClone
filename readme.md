@@ -15,7 +15,7 @@ TODO
 - [x] check board for full rows every time piece is "placed" into the board
 - [x] clear a full row, maybe use splice and then place a new empty row at the beginning of the board? rerender board. Need to check for multiple rows cleared at once.
 - [x] board generates a random piece each time a piece is placed
-- [ ] refactor to use the checkCollision function
+- [x] refactor to use the checkCollision function
 - [x] game over when piece cannot move or cannot even be generated to the board.
 - [ ] add game over stuff, message and animation
 - [ ] update score on DOM
@@ -29,3 +29,4 @@ TODO
 - [ ] display next piece on LHS
 - [ ] more points for multiple rows cleared
 - [ ] timer at the bottom
+- [ ] assign colors to the different pieces
