@@ -8,7 +8,7 @@ TODO
 - [x] piece gets initially placed at top row, halfway across.
 - [x] board is an object, with piece instance attached
 - [x] event listeners - l/r check for walls,
-- [ ] check for pieces already placed,
+- [ ] check l/r for pieces already placed,
 - [x] update piece offset (rerender)
 - [x] event listeners - down, check for piece or bottom, set piece to become part of board
 - [ ] gravity - same as event listener for down but happens every 5 sec.
@@ -22,3 +22,8 @@ TODO
 - [ ] DRY up the code
 - [ ] add zen mode - only squares given
 - [ ] increase speed of gravity over time
+- [ ] add reset button
+- [ ] add 1 point to score for every time piece moves down
+- [ ] display next piece on LHS
+- [ ] more points for multiple rows cleared
+- [ ] timer at the bottom
