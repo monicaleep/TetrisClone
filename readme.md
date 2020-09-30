@@ -8,7 +8,7 @@ TODO
 - [x] piece gets initially placed at top row, halfway across.
 - [x] board is an object, with piece instance attached
 - [x] event listeners - l/r check for walls,
-- [ ] check l/r for pieces already placed,
+- [x] check l/r for pieces already placed,
 - [x] update piece offset (rerender)
 - [x] event listeners - down, check for piece or bottom, set piece to become part of board
 - [ ] gravity - same as event listener for down but happens every 5 sec.

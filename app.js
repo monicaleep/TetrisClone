@@ -1,47 +1,47 @@
 // Array holding all possible shapes in row/col coordinates
 const SHAPES = [
-  // [
-  //   [0, 0],
-  //   [0, 1],
-  //   [0, 2],
-  //   [0, 3],
-  // ], // I
+  [
+    [0, 0],
+    [0, 1],
+    [0, 2],
+    [0, 3],
+  ], // I
   [
     [0, 0],
     [0, 1],
     [1, 1],
     [1, 0],
   ], // O
-  // [
-  //   [1, 0],
-  //   [2, 0],
-  //   [0, 1],
-  //   [1, 1],
-  // ], //S
-  // [
-  //   [0, 0],
-  //   [1, 0],
-  //   [1, 1],
-  //   [2, 1],
-  // ], // Z
-  // [
-  //   [0, 1],
-  //   [1, 1],
-  //   [2, 1],
-  //   [2, 0],
-  // ], // L
-  // [
-  //   [0, 0],
-  //   [0, 1],
-  //   [1, 1],
-  //   [2, 1],
-  // ], // J
-  // [
-  //   [1, 0],
-  //   [0, 1],
-  //   [1, 1],
-  //   [2, 1],
-  // ], // T
+  [
+    [1, 0],
+    [2, 0],
+    [0, 1],
+    [1, 1],
+  ], //S
+  [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [2, 1],
+  ], // Z
+  [
+    [0, 1],
+    [1, 1],
+    [2, 1],
+    [2, 0],
+  ], // L
+  [
+    [0, 0],
+    [0, 1],
+    [1, 1],
+    [2, 1],
+  ], // J
+  [
+    [1, 0],
+    [0, 1],
+    [1, 1],
+    [2, 1],
+  ], // T
 ];
 
 
@@ -139,7 +139,7 @@ const game = {
       for (let j = 0; j < this.BOARD[i].length; j++) {
         const square = document.createElement("div");
         square.classList.add("square");
-        square.innerText = "" + i + "," + j;
+        // square.innerText = "" + i + "," + j;
         square.setAttribute("id", `row${i}col${j}`);
         if (this.BOARD[i][j].occupied) {
           square.classList.add("occupied");
@@ -202,6 +202,22 @@ const game = {
           isHitPlace = true;
         }
       })
+    } else if (direction === "left"){
+      this.currentShape.shape.forEach((piece)=>{
+        let row = piece[0] + offsetR;
+        let col = piece[1] + offsetC;
+        if(this.BOARD[row][col-1].occupied){
+          isHitPlace = true;
+        }
+      })
+    } else if (direction === "right"){
+      this.currentShape.shape.forEach((piece)=>{
+        let row = piece[0] + offsetR;
+        let col = piece[1] + offsetC;
+        if(this.BOARD[row][col+1].occupied){
+          isHitPlace = true;
+        }
+      })
     }
     return isHitPlace
   },
@@ -258,7 +274,7 @@ const game = {
     } else if (e.keyCode === 40) {
       if (this.isHitBottom() || this.hitOccupiedPlace("down")){
         this.addShapeToBoard();
-        // todo, check new shape can be placed (i.e. board is not full!)
+        // TODO, check new shape can be placed (i.e. board is not full!)
         this.currentShape = this.getNewShape();
         this.currentShape.drawShape();
       } else{
@@ -277,10 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// checkCollisions(<coordinates of space to move into>, <direction>, <boardState>"
-
+// TODO refactor checkCollisions(<coordinates of space to move into>, <direction>, <boardState>"
 // TODO a function which takes a board and applies gravity to the active piece
 // work from bottom up looking for the piece
-// check if piece will hit bottom if yes change it from active
 // todo rotation logic - what if rotation makes a collision?
-// todo a function which appends the piece to the board, changing the squares occupied to true
