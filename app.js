@@ -216,9 +216,9 @@ const game = {
   },
 
   // returns true if the piece hits the bottom of the board
-  isHitBottom : function(shape){
+  isHitBottom : function(offsetR, shape){
     let collision = false;
-    let offsetR = this.currentShape.offset[0];
+    //let offsetR = this.currentShape.offset[0];
     // collision is true if any single square from the shape is hitting bottom
     collision = shape.some((piece)=>{
       return offsetR + piece[0] === this.HEIGHT - 1;
@@ -298,7 +298,8 @@ const game = {
   // gravity
   gravity: function(){
     // if moving downward would hit something
-    if (this.isHitBottom(this.currentShape.shape) || this.checkCollision(this.currentShape.offset[0]+1,this.currentShape.offset[1])){
+    const offsetR = this.currentShape.offset[0];
+    if (this.isHitBottom(offsetR, this.currentShape.shape) || this.checkCollision(offsetR+1,this.currentShape.offset[1])){
       this.addShapeToBoard();
       // get a new shape if required
       this.currentShape = this.getNewShape();
@@ -311,10 +312,10 @@ const game = {
       } else{
         this.currentShape.drawShape();
       }
-      // otherwise just move it down
-      // TODO increase score by 1
     } else{
+      // otherwise just move it down
       this.currentShape.moveDown();
+      // increase score by 1
       this.score++;
       this.updateScore();
     }
@@ -323,31 +324,36 @@ const game = {
   canRotate: function(){
     const nextShape = this.currentShape.rotateShape();
     let offsetC = this.currentShape.offset[1]
-    if(this.isHitWall(nextShape,"right",offsetC-1)){
+    let offsetR = this.currentShape.offset[0]
+    // check left/right walls.
+    if(this.isHitWall(nextShape,"right", offsetC-1)){
       return false;
-    } else if (this.isHitWall(nextShape, "left",offsetC+1)){
+    } else if (this.isHitWall(nextShape, "left", offsetC+1)){
       return false;
     }
-    // todo check isHitBottom
+    //  check isHitBottom, it can't go through the floor!
+    else if (this.isHitBottom(offsetR-1,nextShape)){
+      return false;
+    }
     // todo check collision
     return true;
   },
 
-  // handle user inputs L/R/D/U TODO up
+  // handle user inputs L/R/D/U
   handleKeypress: function(e){
     if (this.gameIsOver){
       return;
     }
+    let offsetC = this.currentShape.offset[1]
+    let offsetR = this.currentShape.offset[0]
     // right arrow moves it right
     if (e.keyCode === 39) {
-      let offsetC = this.currentShape.offset[1]
-      if (!this.isHitWall(this.currentShape.shape,"right",offsetC) && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]+1)) {
+      if (!this.isHitWall(this.currentShape.shape,"right",offsetC) && !this.checkCollision(offsetR,offsetC+1)) {
         this.currentShape.moveRight();
       }
       // left arrow moves it left
     } else if (e.keyCode === 37) {
-      let offsetC = this.currentShape.offset[1]
-      if (!this.isHitWall(this.currentShape.shape,"left",offsetC) && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]-1)) {
+      if (!this.isHitWall(this.currentShape.shape,"left",offsetC) && !this.checkCollision(offsetR,offsetC-1)) {
         this.currentShape.moveLeft();
       }
       // down arrow moves it down -> put this all in a function called gravity
