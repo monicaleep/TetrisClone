@@ -11,7 +11,7 @@ TODO/Notes
 - [x] check l/r for pieces already placed,
 - [x] update piece offset to move it (rerender)
 - [x] event listeners - down, check for piece or bottom, set piece to become part of board
-- [x] gravity - same as event listener for down but happens every 5 sec.
+- [ ] gravity - same as event listener for down but happens every 5 sec.
 - [x] check board for full rows every time piece is "placed" into the board
 - [x] clear a full row, maybe use splice and then place a new empty row at the beginning of the board? rerender board. Need to check for multiple rows cleared at once.
 - [x] board generates a random piece each time a piece is placed

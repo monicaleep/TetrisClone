@@ -151,9 +151,9 @@ const game = {
     this.currentShape = this.getNewShape();
     this.renderBoard();
     this.currentShape.drawShape();
-    // this.int = setInterval(()=>{
-    //   this.gravity()
-    // }, 500)
+    this.int = setInterval(()=>{
+      this.gravity()
+    }, 500)
   },
 
   // print the board state to console in a nice way, a helper
@@ -343,7 +343,7 @@ const game = {
     else if (this.isHitBottom(offsetR - 1, nextShape)) {
       return false;
     }
-    // todo check collision
+    //  check collision
     else if (this.checkCollision(offsetR,offsetC,nextShape)){
       return false;
     }
@@ -387,9 +387,3 @@ document.addEventListener("DOMContentLoaded", () => {
     game.handleKeypress(e);
   });
 });
-
-
-// TODO refactor checkCollisions(<coordinates of space to move into>, <direction>, <boardState>"
-// TODO a function which takes a board and applies gravity to the active piece
-// work from bottom up looking for the piece
-// todo rotation logic - what if rotation makes a collision?
