@@ -1,83 +1,90 @@
 // Array holding all possible shapes in row/col coordinates
-const SHAPES = [
-  {shape: [
-    [0, 0],
-    [0, 1],
-    [0, 2],
-    [0, 3],
-  ],
-  color: 'blue', length: 4}, // I
-  {shape:[
-    [0, 0],
-    [0, 1],
-    [1, 1],
-    [1, 0],
-  ],
-  color: 'yellow', length: 2}, // O
-  {shape: [
-    [0, 0],
-    [1, 1],
-    [0, 1],
-    [1, 2],
-  ],
-  color: 'hotpink'}, //Z
-  {shape:[
-    [0, 0],
-    [1, 0],
-    [1, 1],
-    [2, 1],
-  ],
-  color: 'green'}, // S
-  {shape:[
-    [0, 1],
-    [1, 1],
-    [2, 1],
-    [2, 0],
-  ],
-  color: 'purple'}, // J
-  {shape: [
-    [0, 0],
-    [0, 1],
-    [1, 1],
-    [2, 1],
-  ],
-  color: 'orange'}, // L
-  {shape: [
-    [0, 0],
-    [0, 1],
-    [0, 2],
-    [1, 1],
-  ],
-  color: 'red'}, // T
+const SHAPES = [{
+    shape: [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+      [0, 3],
+    ],
+    color: 'blue',
+    length: 4
+  }, // I
+  {
+    shape: [
+      [0, 0],
+      [0, 1],
+      [1, 1],
+      [1, 0],
+    ],
+    color: 'yellow',
+    length: 2
+  }, // O
+  {
+    shape: [
+      [0, 0],
+      [1, 1],
+      [0, 1],
+      [1, 2],
+    ],
+    color: 'hotpink'
+  }, //Z
+  {
+    shape: [
+      [0, 0],
+      [1, 0],
+      [1, 1],
+      [2, 1],
+    ],
+    color: 'green'
+  }, // S
+  {
+    shape: [
+      [0, 1],
+      [1, 1],
+      [2, 1],
+      [2, 0],
+    ],
+    color: 'purple'
+  }, // J
+  {
+    shape: [
+      [0, 0],
+      [0, 1],
+      [1, 1],
+      [2, 1],
+    ],
+    color: 'orange'
+  }, // L
+  {
+    shape: [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+      [1, 1],
+    ],
+    color: 'red'
+  }, // T
 ];
 
-const rotateShape = (shape)=>{
-  let newShape = shape.map((piece)=>{
-    let newR = 1 - (piece[1]-(3-2));
-    let newC = piece[0];
-    return [newR,newC]
-  })
-  return newShape
-}
 
 class Shape {
-  constructor(shape, offset, color, length=3) {
+  constructor(shape, offset, color, length = 3) {
     this.shape = shape;
     this.offset = offset;
     this.color = color;
     this.length = length;
   }
-  moveLeft(){
+  moveLeft() {
     this.clearShape();
     this.offset[1]--
     this.drawShape();
   }
-  moveRight(){
+  moveRight() {
     this.clearShape();
     this.offset[1]++
     this.drawShape();
   }
-  moveDown(){
+  moveDown() {
     this.clearShape();
     this.offset[0]++;
     this.drawShape();
@@ -95,7 +102,7 @@ class Shape {
     }
   }
   // clear the shape from the DOM
-  clearShape(){
+  clearShape() {
     // iterate over shape's coordinates
     for (let i = 0; i < this.shape.length; i++) {
       // clear shape at r,c position on the board
@@ -105,13 +112,13 @@ class Shape {
       target.style.backgroundColor = 'lightblue'
     }
   }
-  rotateShape(){
+  rotateShape() {
     // returns a new shape rotated 90 degrees
-    let newShape = this.shape.map((piece)=>{
+    let newShape = this.shape.map((piece) => {
       // need to account for length of the piece otherwise you can get negative numbers
-      let newR = 1 - (piece[1]-(this.length-2));
+      let newR = 1 - (piece[1] - (this.length - 2));
       let newC = piece[0];
-      return [newR,newC]
+      return [newR, newC]
     })
     return newShape
   }
@@ -150,14 +157,14 @@ const game = {
   },
 
   // print the board state to console in a nice way, a helper
-  printBoard : function(){
-    this.BOARD.forEach(row=>{
+  printBoard: function() {
+    this.BOARD.forEach(row => {
       console.table(row)
     })
   },
 
   //return a random entry from the array of shapes
-  getRandomShape : function(){
+  getRandomShape: function() {
     return SHAPES[Math.floor(Math.random() * SHAPES.length)];
   },
 
@@ -186,7 +193,7 @@ const game = {
   },
 
   //removes the board from the dom
-  clearBoard : function(){
+  clearBoard: function() {
     document.querySelector('.board').remove()
   },
 
@@ -198,8 +205,7 @@ const game = {
   },
 
   // return true if a collision will occur to check: left right walls
-  // todo, refactor to take an offset array as input
-  isHitWall : function(shape, direction, offsetC){
+  isHitWall: function(shape, direction, offsetC) {
     // if direction is left, look at every point in the shape and see if shape point[0] + offsetC !== 0
     let collision = false;
     //let offsetC = this.currentShape.offset[1];
@@ -216,11 +222,11 @@ const game = {
   },
 
   // returns true if the piece hits the bottom of the board
-  isHitBottom : function(offsetR, shape){
+  isHitBottom: function(offsetR, shape) {
     let collision = false;
     //let offsetR = this.currentShape.offset[0];
     // collision is true if any single square from the shape is hitting bottom
-    collision = shape.some((piece)=>{
+    collision = shape.some((piece) => {
       return offsetR + piece[0] === this.HEIGHT - 1;
     });
     return collision;
@@ -228,11 +234,11 @@ const game = {
 
 
   // adds the current shape to the board, setting the places where shape was to occupied
-  addShapeToBoard : function(){
+  addShapeToBoard: function() {
     const pieceToPlace = this.currentShape;
     const offsetR = this.currentShape.offset[0];
     const offsetC = this.currentShape.offset[1];
-    pieceToPlace.shape.forEach((piece)=>{
+    pieceToPlace.shape.forEach((piece) => {
       // get the piece's row and coloumn, add to the shape's offset
       let pieceR = piece[0] + offsetR;
       let pieceC = piece[1] + offsetC;
@@ -246,20 +252,22 @@ const game = {
     // render the newly updated board
     this.renderBoard();
     // check if any rows are full
-    this.handleFullRows();// - eventually set a timeout
+    this.handleFullRows(); // - eventually set a timeout
   },
 
   // scan the board for full rows and handle them
-  handleFullRows : function(){
+  handleFullRows: function() {
     // check if all columns in each row are occupied
-    this.BOARD.forEach((row, rowindex)=>{
-      if(row.every((square) =>  square.occupied)){
+    this.BOARD.forEach((row, rowindex) => {
+      if (row.every((square) => square.occupied)) {
         // if so splice out the row(s) from board array
-        this.BOARD.splice(rowindex,1)
+        this.BOARD.splice(rowindex, 1)
         // update the score
         this.score += 10;
         // add a new empty row to the start of board array
-        this.BOARD.unshift(new Array(this.WIDTH).fill({occupied: false}));
+        this.BOARD.unshift(new Array(this.WIDTH).fill({
+          occupied: false
+        }));
         // update dom
         this.updateScore()
         this.clearBoard();
@@ -269,12 +277,12 @@ const game = {
   },
 
   // takes a new offset row and column and checks if current piece will cause a collision if placed there
-  checkCollision : function(newRow,newColumn){
+  checkCollision: function(newRow, newColumn, shape) {
     let collision = false;
-    this.currentShape.shape.forEach((piece)=>{
+    shape.forEach((piece) => {
       let rowToCheck = piece[0] + newRow;
       let colToCheck = piece[1] + newColumn;
-      if(this.BOARD[rowToCheck][colToCheck].occupied){
+      if (this.BOARD[rowToCheck][colToCheck].occupied) {
         collision = true;
       }
     });
@@ -282,7 +290,7 @@ const game = {
   },
 
   // function runs when game over
-  gameOver : function(){
+  gameOver: function() {
     this.gameIsOver = true;
     clearInterval(this.int)
     const message = document.createElement('h2');
@@ -291,28 +299,28 @@ const game = {
   },
 
   // update the scoreboard on the dom
-  updateScore: function(){
+  updateScore: function() {
     document.getElementById('score').innerText = this.score
   },
 
   // gravity
-  gravity: function(){
+  gravity: function() {
     // if moving downward would hit something
     const offsetR = this.currentShape.offset[0];
-    if (this.isHitBottom(offsetR, this.currentShape.shape) || this.checkCollision(offsetR+1,this.currentShape.offset[1])){
+    if (this.isHitBottom(offsetR, this.currentShape.shape) || this.checkCollision(offsetR + 1, this.currentShape.offset[1],this.currentShape.shape)) {
       this.addShapeToBoard();
       // get a new shape if required
       this.currentShape = this.getNewShape();
       // checks if the new shape is having a collision on the board
-      if(this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1])){
+      if (this.checkCollision(this.currentShape.offset[0], this.currentShape.offset[1],this.currentShape.shape)) {
         // draw the shape anyways
         this.currentShape.drawShape();
-        // the new shape cannot be placed onto the board
+        // the new shape cannot be placed onto the board, game is over
         this.gameOver();
-      } else{
+      } else {
         this.currentShape.drawShape();
       }
-    } else{
+    } else {
       // otherwise just move it down
       this.currentShape.moveDown();
       // increase score by 1
@@ -321,46 +329,49 @@ const game = {
     }
   },
 
-  canRotate: function(){
+  canRotate: function() {
     const nextShape = this.currentShape.rotateShape();
     let offsetC = this.currentShape.offset[1]
     let offsetR = this.currentShape.offset[0]
     // check left/right walls.
-    if(this.isHitWall(nextShape,"right", offsetC-1)){
+    if (this.isHitWall(nextShape, "right", offsetC - 1)) {
       return false;
-    } else if (this.isHitWall(nextShape, "left", offsetC+1)){
+    } else if (this.isHitWall(nextShape, "left", offsetC + 1)) {
       return false;
     }
     //  check isHitBottom, it can't go through the floor!
-    else if (this.isHitBottom(offsetR-1,nextShape)){
+    else if (this.isHitBottom(offsetR - 1, nextShape)) {
       return false;
     }
     // todo check collision
+    else if (this.checkCollision(offsetR,offsetC,nextShape)){
+      return false;
+    }
     return true;
   },
 
   // handle user inputs L/R/D/U
-  handleKeypress: function(e){
-    if (this.gameIsOver){
+  handleKeypress: function(e) {
+    if (this.gameIsOver) {
       return;
     }
     let offsetC = this.currentShape.offset[1]
     let offsetR = this.currentShape.offset[0]
     // right arrow moves it right
     if (e.keyCode === 39) {
-      if (!this.isHitWall(this.currentShape.shape,"right",offsetC) && !this.checkCollision(offsetR,offsetC+1)) {
+      if (!this.isHitWall(this.currentShape.shape, "right", offsetC) && !this.checkCollision(offsetR, offsetC + 1,this.currentShape.shape)) {
         this.currentShape.moveRight();
       }
       // left arrow moves it left
     } else if (e.keyCode === 37) {
-      if (!this.isHitWall(this.currentShape.shape,"left",offsetC) && !this.checkCollision(offsetR,offsetC-1)) {
+      if (!this.isHitWall(this.currentShape.shape, "left", offsetC) && !this.checkCollision(offsetR, offsetC - 1,this.currentShape.shape)) {
         this.currentShape.moveLeft();
       }
       // down arrow moves it down -> put this all in a function called gravity
     } else if (e.keyCode === 40) {
-        this.gravity()
-    } else if (e.keyCode === 38){
-      if(this.canRotate()){
+      this.gravity()
+    } else if (e.keyCode === 38) {
+      if (this.canRotate()) {
         this.currentShape.clearShape();
         this.currentShape.shape = this.currentShape.rotateShape();
         this.currentShape.drawShape();
