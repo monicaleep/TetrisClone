@@ -6,14 +6,14 @@ const SHAPES = [
     [0, 2],
     [0, 3],
   ],
-  color: 'blue'}, // I
+  color: 'blue', length: 4}, // I
   {shape:[
     [0, 0],
     [0, 1],
     [1, 1],
     [1, 0],
   ],
-  color: 'yellow'}, // O
+  color: 'yellow', length: 2}, // O
   {shape: [
     [0, 0],
     [1, 1],
@@ -29,10 +29,10 @@ const SHAPES = [
   ],
   color: 'green'}, // S
   {shape:[
-    [0, 0],
-    [1, 0],
+    [0, 1],
+    [1, 1],
+    [2, 1],
     [2, 0],
-    [2, -1],
   ],
   color: 'purple'}, // J
   {shape: [
@@ -51,12 +51,21 @@ const SHAPES = [
   color: 'red'}, // T
 ];
 
+const rotateShape = (shape)=>{
+  let newShape = shape.map((piece)=>{
+    let newR = 1 - (piece[1]-(3-2));
+    let newC = piece[0];
+    return [newR,newC]
+  })
+  return newShape
+}
 
 class Shape {
-  constructor(shape, offset, color) {
+  constructor(shape, offset, color, length=3) {
     this.shape = shape;
     this.offset = offset;
     this.color = color;
+    this.length = length;
   }
   moveLeft(){
     this.clearShape();
@@ -80,6 +89,15 @@ class Shape {
       // place shape at r,c position on the board
       let r = this.shape[i][0] + this.offset[0];
       let c = this.shape[i][1] + this.offset[1];
+      while(r<0){
+        this.offset[0]++;
+        r++
+      }
+      while(c<0){
+        this.offset[1]++;
+        c++
+      }
+      console.log(r,c)
       let target = document.querySelector(`#row${r}col${c}`);
       target.style.backgroundColor = this.color;
     }
@@ -94,6 +112,16 @@ class Shape {
       let target = document.querySelector(`#row${r}col${c}`);
       target.style.backgroundColor = 'lightblue'
     }
+  }
+  rotateShape(){
+
+    let newShape = this.shape.map((piece)=>{
+      // need to account for length of the piece otherwise you can get negative numbers
+      let newR = 1 - (piece[1]-(this.length-2));
+      let newC = piece[0];
+      return [newR,newC]
+    })
+    this.shape= newShape
   }
 }
 
@@ -174,7 +202,7 @@ const game = {
   getNewShape: function() {
     const shape = this.getRandomShape(); // get random shape from the array of shapes
     const offset = [0, Math.floor(this.WIDTH / 2)]; //set its initial coordinates to be top of the board, in the middle
-    return new Shape(shape.shape, offset, shape.color);
+    return new Shape(shape.shape, offset, shape.color, shape.length);
   },
 
   // return true if a collision will occur to check: left right walls
@@ -299,6 +327,10 @@ const game = {
     }
   },
 
+  canRotate: function(){
+    return true;
+  },
+
   // handle user inputs L/R/D/U TODO up
   handleKeypress: function(e){
     if (this.gameIsOver){
@@ -317,6 +349,12 @@ const game = {
       // down arrow moves it down -> put this all in a function called gravity
     } else if (e.keyCode === 40) {
         this.gravity()
+    } else if (e.keyCode === 38){
+      if(this.canRotate()){
+        this.currentShape.clearShape();
+        this.currentShape.rotateShape();
+        this.currentShape.drawShape();
+      }
     }
   }
 

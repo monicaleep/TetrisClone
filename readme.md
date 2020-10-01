@@ -1,4 +1,4 @@
-TODO
+TODO/Notes
 
 - [x] Grid to represent the board - array of arrays. 0 represents empty, 1 represents occupied
 - [ ] Initial size: 20 rows, 10 columns
@@ -9,7 +9,7 @@ TODO
 - [x] board is an object, with piece instance attached
 - [x] event listeners - l/r check for walls,
 - [x] check l/r for pieces already placed,
-- [x] update piece offset (rerender)
+- [x] update piece offset to move it (rerender)
 - [x] event listeners - down, check for piece or bottom, set piece to become part of board
 - [x] gravity - same as event listener for down but happens every 5 sec.
 - [x] check board for full rows every time piece is "placed" into the board
@@ -28,4 +28,4 @@ TODO
 - [ ] display next piece on LHS
 - [ ] more points for multiple rows cleared
 - [ ] timer at the bottom
-- [ ] assign colors to the different pieces
+- [x] assign colors to the different pieces
