@@ -1,5 +1,6 @@
 // Array holding all possible shapes in row/col coordinates
-const SHAPES = [{
+const SHAPES = [
+  {
     shape: [
       [0, 0],
       [0, 1],
@@ -143,9 +144,9 @@ const game = {
     for (let i = 0; i < this.HEIGHT; i++) {
       this.BOARD.push([]);
       for (let j = 0; j < this.WIDTH; j++) {
-        this.BOARD[i].push({
-          occupied: false,
-        });
+        this.BOARD[i].push(
+          false
+        );
       }
     }
     this.currentShape = this.getNewShape();
@@ -153,14 +154,12 @@ const game = {
     this.currentShape.drawShape();
     this.int = setInterval(()=>{
       this.gravity()
-    }, 500)
+    }, 800)
   },
 
   // print the board state to console in a nice way, a helper
   printBoard: function() {
-    this.BOARD.forEach(row => {
-      console.table(row)
-    })
+    console.table(game.BOARD)
   },
 
   //return a random entry from the array of shapes
@@ -183,8 +182,9 @@ const game = {
         square.classList.add("square");
         // square.innerText = "" + i + "," + j;
         square.setAttribute("id", `row${i}col${j}`);
-        if (this.BOARD[i][j].occupied) {
+        if (this.BOARD[i][j]) {
           square.classList.add("occupied");
+          square.innerText = "Y"
         }
         row.appendChild(square);
       }
@@ -208,7 +208,6 @@ const game = {
   isHitWall: function(shape, direction, offsetC) {
     // if direction is left, look at every point in the shape and see if shape point[0] + offsetC !== 0
     let collision = false;
-    //let offsetC = this.currentShape.offset[1];
     if (direction === "left") {
       collision = shape.some((piece) => {
         return offsetC + piece[1] === 0;
@@ -242,7 +241,7 @@ const game = {
       // get the piece's row and coloumn, add to the shape's offset
       let pieceR = piece[0] + offsetR;
       let pieceC = piece[1] + offsetC;
-      this.BOARD[pieceR][pieceC].occupied = true;
+      this.BOARD[pieceR][pieceC] = true;
       // change the board array;
     });
     // clear shape
@@ -259,19 +258,22 @@ const game = {
   handleFullRows: function() {
     // check if all columns in each row are occupied
     this.BOARD.forEach((row, rowindex) => {
-      if (row.every((square) => square.occupied)) {
+      if (row.every((square) => square)) {
         // if so splice out the row(s) from board array
         this.BOARD.splice(rowindex, 1)
         // update the score
         this.score += 10;
         // add a new empty row to the start of board array
-        this.BOARD.unshift(new Array(this.WIDTH).fill({
-          occupied: false
-        }));
+        this.BOARD.unshift(new Array(this.WIDTH).fill(
+           false
+        ));
         // update dom
+        this.printBoard()
+
         this.updateScore()
         this.clearBoard();
         this.renderBoard();
+        this.printBoard()
       }
     });
   },
@@ -282,7 +284,7 @@ const game = {
     shape.forEach((piece) => {
       let rowToCheck = piece[0] + newRow;
       let colToCheck = piece[1] + newColumn;
-      if (this.BOARD[rowToCheck][colToCheck].occupied) {
+      if (this.BOARD[rowToCheck][colToCheck]) {
         collision = true;
       }
     });
