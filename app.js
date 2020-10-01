@@ -89,15 +89,7 @@ class Shape {
       // place shape at r,c position on the board
       let r = this.shape[i][0] + this.offset[0];
       let c = this.shape[i][1] + this.offset[1];
-      while(r<0){
-        this.offset[0]++;
-        r++
-      }
-      while(c<0){
-        this.offset[1]++;
-        c++
-      }
-      console.log(r,c)
+
       let target = document.querySelector(`#row${r}col${c}`);
       target.style.backgroundColor = this.color;
     }
@@ -114,14 +106,14 @@ class Shape {
     }
   }
   rotateShape(){
-
+    // returns a new shape rotated 90 degrees
     let newShape = this.shape.map((piece)=>{
       // need to account for length of the piece otherwise you can get negative numbers
       let newR = 1 - (piece[1]-(this.length-2));
       let newC = piece[0];
       return [newR,newC]
     })
-    this.shape= newShape
+    return newShape
   }
 }
 
@@ -206,16 +198,16 @@ const game = {
   },
 
   // return true if a collision will occur to check: left right walls
-  isHitWall : function(direction){
+  isHitWall : function(shape, direction){
     // if direction is left, look at every point in the shape and see if shape point[0] + offsetC !== 0
     let collision = false;
     let offsetC = this.currentShape.offset[1];
     if (direction === "left") {
-      collision = this.currentShape.shape.some((piece) => {
+      collision = shape.some((piece) => {
         return offsetC + piece[1] === 0;
       });
     } else if (direction === "right") {
-      collision = this.currentShape.shape.some((piece) => {
+      collision = shape.some((piece) => {
         return offsetC + piece[1] === this.WIDTH - 1;
       });
     }
@@ -223,11 +215,11 @@ const game = {
   },
 
   // returns true if the piece hits the bottom of the board
-  isHitBottom : function(){
+  isHitBottom : function(shape){
     let collision = false;
     let offsetR = this.currentShape.offset[0];
     // collision is true if any single square from the shape is hitting bottom
-    collision = this.currentShape.shape.some((piece)=>{
+    collision = shape.some((piece)=>{
       return offsetR + piece[0] === this.HEIGHT - 1;
     });
     return collision;
@@ -305,7 +297,7 @@ const game = {
   // gravity
   gravity: function(){
     // if moving downward would hit something
-    if (this.isHitBottom() || this.checkCollision(this.currentShape.offset[0]+1,this.currentShape.offset[1])){
+    if (this.isHitBottom(this.currentShape.shape) || this.checkCollision(this.currentShape.offset[0]+1,this.currentShape.offset[1])){
       this.addShapeToBoard();
       // get a new shape if required
       this.currentShape = this.getNewShape();
@@ -328,6 +320,15 @@ const game = {
   },
 
   canRotate: function(){
+    const nextShape = this.currentShape.rotateShape();
+
+    if(this.isHitWall(nextShape,"right")){
+      console.log('wall')
+      return false;
+    } else if (this.isHitWall(nextShape, "left")){
+      console.log('wall')
+      return false;
+    }
     return true;
   },
 
@@ -338,12 +339,12 @@ const game = {
     }
     // right arrow moves it right
     if (e.keyCode === 39) {
-      if (!this.isHitWall("right") && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]+1)) {
+      if (!this.isHitWall(this.currentShape.shape,"right") && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]+1)) {
         this.currentShape.moveRight();
       }
       // left arrow moves it left
     } else if (e.keyCode === 37) {
-      if (!this.isHitWall("left") && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]-1)) {
+      if (!this.isHitWall(this.currentShape.shape,"left") && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]-1)) {
         this.currentShape.moveLeft();
       }
       // down arrow moves it down -> put this all in a function called gravity
@@ -352,7 +353,7 @@ const game = {
     } else if (e.keyCode === 38){
       if(this.canRotate()){
         this.currentShape.clearShape();
-        this.currentShape.rotateShape();
+        this.currentShape.shape = this.currentShape.rotateShape();
         this.currentShape.drawShape();
       }
     }
