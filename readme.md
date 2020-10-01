@@ -1,7 +1,7 @@
 TODO/Notes
 
 - [x] Grid to represent the board - array of arrays. 0 represents empty, 1 represents occupied
-- [ ] Initial size: 20 rows, 10 columns
+- [x] Initial size: 20 rows, 10 columns
 - [x] render the grid to DOM, give each square an ID
 - [x] Pieces - a class,  a shape, an offset
 - [x] offset determines the top left corner of the piece
@@ -19,8 +19,8 @@ TODO/Notes
 - [x] game over when piece cannot move or cannot even be generated to the board.
 - [x] add game over stuff, message and animation
 - [x] update score on DOM
-- [ ] handle piece rotation
-- [ ] check if piece can even rotate
+- [x] handle piece rotation
+- [x] check if piece can even rotate
 - [ ] add zen mode - only squares given
 - [ ] increase speed of gravity over time
 - [ ] add reset button
