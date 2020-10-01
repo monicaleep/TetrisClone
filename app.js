@@ -144,9 +144,9 @@ const game = {
     this.currentShape = this.getNewShape();
     this.renderBoard();
     this.currentShape.drawShape();
-    this.int = setInterval(()=>{
-      this.gravity()
-    }, 500)
+    // this.int = setInterval(()=>{
+    //   this.gravity()
+    // }, 500)
   },
 
   // print the board state to console in a nice way, a helper
@@ -198,10 +198,11 @@ const game = {
   },
 
   // return true if a collision will occur to check: left right walls
-  isHitWall : function(shape, direction){
+  // todo, refactor to take an offset array as input
+  isHitWall : function(shape, direction, offsetC){
     // if direction is left, look at every point in the shape and see if shape point[0] + offsetC !== 0
     let collision = false;
-    let offsetC = this.currentShape.offset[1];
+    //let offsetC = this.currentShape.offset[1];
     if (direction === "left") {
       collision = shape.some((piece) => {
         return offsetC + piece[1] === 0;
@@ -321,14 +322,14 @@ const game = {
 
   canRotate: function(){
     const nextShape = this.currentShape.rotateShape();
-
-    if(this.isHitWall(nextShape,"right")){
-      console.log('wall')
+    let offsetC = this.currentShape.offset[1]
+    if(this.isHitWall(nextShape,"right",offsetC-1)){
       return false;
-    } else if (this.isHitWall(nextShape, "left")){
-      console.log('wall')
+    } else if (this.isHitWall(nextShape, "left",offsetC+1)){
       return false;
     }
+    // todo check isHitBottom
+    // todo check collision
     return true;
   },
 
@@ -339,12 +340,14 @@ const game = {
     }
     // right arrow moves it right
     if (e.keyCode === 39) {
-      if (!this.isHitWall(this.currentShape.shape,"right") && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]+1)) {
+      let offsetC = this.currentShape.offset[1]
+      if (!this.isHitWall(this.currentShape.shape,"right",offsetC) && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]+1)) {
         this.currentShape.moveRight();
       }
       // left arrow moves it left
     } else if (e.keyCode === 37) {
-      if (!this.isHitWall(this.currentShape.shape,"left") && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]-1)) {
+      let offsetC = this.currentShape.offset[1]
+      if (!this.isHitWall(this.currentShape.shape,"left",offsetC) && !this.checkCollision(this.currentShape.offset[0],this.currentShape.offset[1]-1)) {
         this.currentShape.moveLeft();
       }
       // down arrow moves it down -> put this all in a function called gravity
