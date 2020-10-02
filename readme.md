@@ -33,7 +33,7 @@ What I found really helpful was to continuously update my TODO list (below) and 
 - [x] check if piece can even rotate
 - [ ] add zen mode - only squares given
 - [ ] increase speed of gravity over time
-- [ ] add reset button
+- [x] add reset button
 - [x] add 1 point to score for every time piece moves down
 - [ ] display next piece on LHS
 - [ ] more points for multiple rows cleared
