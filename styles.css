@@ -7,7 +7,12 @@ html{
 h1,h2{
   font-family: 'Press Start 2P'
 }
-
+h1{
+  margin: 0;
+}
+h2{
+  font-size: 1.2em;
+}
 p{
   font-family: Quicksand
 }
@@ -30,7 +35,19 @@ aside{
   height: 200px;
   text-align: center;
 }
-
+button{
+  background: transparent;
+  margin: 0 20px 0 20px;
+  padding: 5px;
+  outline: none;
+  border: solid 1px #0E0E52;
+  font-family: Quicksand;
+  text-transform: uppercase;
+}
+button:hover{
+  cursor: pointer;
+  background-color: lightcyan;
+}
 .board{
   height: 440px;
   width: 200px;

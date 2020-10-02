@@ -130,6 +130,7 @@ class Shape {
 
 // Game object
 const game = {
+  paused: false,
   currentShape: null,
   HEIGHT: 20,
   WIDTH: 10,
@@ -155,6 +156,23 @@ const game = {
     this.int = setInterval(()=>{
       this.gravity()
     }, 800)
+  },
+
+  // Restart
+  restart: function() {
+    // reset all the values
+    this.currentShape = null;
+    this.BOARD = [];
+    this.score = 0;
+    this.updateScore();
+    // clear the interval
+    clearInterval(game.int)
+    this.gameIsOver = false;
+    this.paused = false;
+    this.clearBoard();
+    // start the game
+    this.start();
+    document.querySelector('#pause').innerText = 'PAUSE';
   },
 
   // print the board state to console in a nice way, a helper for my debugging
@@ -349,7 +367,7 @@ const game = {
 
   // handle user inputs L/R/D/U
   handleKeypress: function(e) {
-    if (this.gameIsOver) {
+    if (this.gameIsOver || this.paused) {
       return;
     }
     let offsetC = this.currentShape.offset[1]
@@ -383,4 +401,18 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", (e) => {
     game.handleKeypress(e);
   });
+  document.querySelector('#pause').addEventListener('click',(e)=>{
+    if(!game.paused){
+      game.paused = true;
+      clearInterval(game.int);
+      e.target.innerText = 'RESUME'
+    } else{
+      game.paused = false;
+      e.target.innerText = 'PAUSE'
+      game.int = setInterval(()=>{game.gravity()}, 800)
+    }
+  });
+  document.querySelector('#restart').addEventListener('click',()=>{
+    game.restart();
+  })
 });
