@@ -133,7 +133,7 @@ const game = {
   currentShape: null,
   HEIGHT: 20,
   WIDTH: 10,
-  BOARD: [],
+  BOARD: [], //populated with the start method
   gameIsOver: false,
   score: 0,
   int: null, // will hold the setInterval for gravity
@@ -144,20 +144,20 @@ const game = {
     for (let i = 0; i < this.HEIGHT; i++) {
       this.BOARD.push([]);
       for (let j = 0; j < this.WIDTH; j++) {
-        this.BOARD[i].push(
-          false
-        );
+        this.BOARD[i].push(false);
       }
     }
+    //set initial shape
     this.currentShape = this.getNewShape();
     this.renderBoard();
     this.currentShape.drawShape();
+    // start the gravity
     this.int = setInterval(()=>{
       this.gravity()
     }, 800)
   },
 
-  // print the board state to console in a nice way, a helper
+  // print the board state to console in a nice way, a helper for my debugging
   printBoard: function() {
     console.table(game.BOARD)
   },
@@ -180,11 +180,9 @@ const game = {
       for (let j = 0; j < this.BOARD[i].length; j++) {
         const square = document.createElement("div");
         square.classList.add("square");
-        // square.innerText = "" + i + "," + j;
         square.setAttribute("id", `row${i}col${j}`);
         if (this.BOARD[i][j]) {
           square.classList.add("occupied");
-          square.innerText = "Y"
         }
         row.appendChild(square);
       }
@@ -223,7 +221,6 @@ const game = {
   // returns true if the piece hits the bottom of the board
   isHitBottom: function(offsetR, shape) {
     let collision = false;
-    //let offsetR = this.currentShape.offset[0];
     // collision is true if any single square from the shape is hitting bottom
     collision = shape.some((piece) => {
       return offsetR + piece[0] === this.HEIGHT - 1;
@@ -241,8 +238,8 @@ const game = {
       // get the piece's row and coloumn, add to the shape's offset
       let pieceR = piece[0] + offsetR;
       let pieceC = piece[1] + offsetC;
-      this.BOARD[pieceR][pieceC] = true;
       // change the board array;
+      this.BOARD[pieceR][pieceC] = true;
     });
     // clear shape
     this.currentShape.clearShape();
@@ -251,7 +248,7 @@ const game = {
     // render the newly updated board
     this.renderBoard();
     // check if any rows are full
-    this.handleFullRows(); // - eventually set a timeout
+    this.handleFullRows(); // - eventually set a timeout?
   },
 
   // scan the board for full rows and handle them
@@ -268,8 +265,6 @@ const game = {
            false
         ));
         // update dom
-        this.printBoard()
-
         this.updateScore()
         this.clearBoard();
         this.renderBoard();
