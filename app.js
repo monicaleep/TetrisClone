@@ -165,6 +165,10 @@ const game = {
     this.currentShape = null;
     this.BOARD = [];
     this.score = 0;
+    if(document.querySelector('h2')){
+
+      document.querySelector('h2').remove()
+    }
     this.updateScore();
     // clear the interval
     clearInterval(game.int)

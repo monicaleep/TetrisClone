@@ -12,7 +12,7 @@ This project is a modelled after the game Tetris where different shape blocks fa
 
 #### Technologies used:
 - HTML
-- CSS (flexbox)
+- CSS (flexbox, Google Fonts)
 - JavaScript (ES6 Classes and OOP Methodology)
 
 ---
@@ -53,10 +53,10 @@ What I found really helpful was to continuously update my TODO list (below) and 
 - [x] check l/r for pieces already placed,
 - [x] update piece offset to move it (rerender)
 - [x] event listeners - down, check for piece or bottom, set piece to become part of board
-- [x] gravity - same as event listener for down but happens every 5 sec.
+- [x] gravity - same as event listener for down but happens every 500 msec.
 - [x] check board for full rows every time piece is "placed" into the board
-- [x] clear a full row, maybe use splice and then place a new empty row at the beginning of the board? rerender board. Need to check for multiple rows cleared at once.
-- [x] board generates a random piece each time a piece is placed
+- [x] clear a full row, rerender board.
+- [x] board generates a random new piece each time a piece is placed
 - [x] game over when piece cannot move or cannot even be generated to the board.
 - [x] add game over stuff, message
 
