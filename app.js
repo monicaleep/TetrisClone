@@ -137,6 +137,7 @@ const game = {
   BOARD: [], //populated with the start method
   gameIsOver: false,
   score: 0,
+  speed: 600,
   int: null, // will hold the setInterval for gravity
 
   // called when the DOM is loaded. Creates initial board array, gets first shape, and renders everything
@@ -155,7 +156,7 @@ const game = {
     // start the gravity
     this.int = setInterval(()=>{
       this.gravity()
-    }, 800)
+    }, this.speed)
   },
 
   // Restart
@@ -341,6 +342,7 @@ const game = {
       // increase score by 1
       this.score++;
       this.updateScore();
+
     }
   },
 
@@ -409,7 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else{
       game.paused = false;
       e.target.innerText = 'PAUSE'
-      game.int = setInterval(()=>{game.gravity()}, 800)
+      game.int = setInterval(()=>{game.gravity()}, game.speed)
     }
   });
   document.querySelector('#restart').addEventListener('click',()=>{
