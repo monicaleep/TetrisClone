@@ -1,7 +1,7 @@
 # Tetris Project in JS
 ---
 
-#### Live Demo: The game is live and playable at this [link](https://monicaleep.github.io/P1/)
+#### Live Demo: The game is live and playable at this [link](https://monicaleep.github.io/TetrisClone/)
 ---
 
 #### Concept
