@@ -13,7 +13,7 @@ This project is a modelled after the game Tetris where different shape blocks fa
 #### Technologies used:
 - HTML
 - CSS (flexbox, Google Fonts)
-- JavaScript (ES6 Classes and OOP Methodology)
+- JavaScript (MVC, ES6 Classes and OOP Methodology)
 
 ---
 
@@ -22,7 +22,7 @@ This project is a modelled after the game Tetris where different shape blocks fa
 
 ###### Overview:
 
-To make this project I used a JavaScript Class for the pieces, and an Object to hold the game. I used arrays to store the game's data and render it to the DOM. Styling was done with flexbox, google fonts, and background image layers.
+To make this project I used a JavaScript Class for the pieces, and an Object to hold the game. Following an MVC patterns, I used arrays to store the game's data and render it to the DOM. Styling was done with flexbox, google fonts, and background image layers.
 
 What I found really helpful was to continuously update my TODO list (below) and be as thorough as possible from the beginning. I did several refactors including the change to OOP, rewriting functions as I found a lot of duplication in code (i.e. checking for left/right collisions can be in the same function). I have some pending TODOs but they are just additional features to more closely match the official Tetris rules like increase speed over time, bonus points for clearing multiple lines at once.
 
